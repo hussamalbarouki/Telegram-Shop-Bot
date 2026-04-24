@@ -6,6 +6,7 @@ use App\Http\Middleware\RedirectIfInstalled;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Log;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,5 +22,44 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $installerRoutePatterns = ['install', 'install/*'];
+
+        $exceptions->report(function (\Throwable $exception) use ($installerRoutePatterns) {
+            if (! app()->bound('request')) {
+                if (! app()->runningInConsole()) {
+                    Log::channel('install_errors')->error('Unhandled exception before request binding', [
+                        'exception' => get_class($exception),
+                        'message' => $exception->getMessage(),
+                        'file' => $exception->getFile(),
+                        'line' => $exception->getLine(),
+                    ]);
+                }
+
+                return;
+            }
+
+            $request = request();
+
+            $isInstallerRequest = false;
+            foreach ($installerRoutePatterns as $pattern) {
+                if ($request->is($pattern)) {
+                    $isInstallerRequest = true;
+                    break;
+                }
+            }
+
+            if (! $isInstallerRequest) {
+                return;
+            }
+
+            Log::channel('install_errors')->error('Installer request failed', [
+                'method' => $request->method(),
+                'url' => $request->fullUrl(),
+                'ip' => $request->ip(),
+                'exception' => get_class($exception),
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+            ]);
+        });
     })->create();
