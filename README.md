@@ -43,5 +43,5 @@
 - التسليمات الرقمية الحساسة: `storage/app/digital-deliveries`.
 
 ## السجلات (Logs)
-- سجل Laravel العام: `storage/logs/laravel.log`.
-- سجل أخطاء التثبيت (`/install`): `storage/logs/install-errors-YYYY-MM-DD.log`.
+- سجل Laravel العام: `storage/logs/laravel.log` (أو `laravel-YYYY-MM-DD.log` عند تفعيل `daily`).
+- سجل أخطاء التثبيت (`/install`): `storage/logs/install_errors-YYYY-MM-DD.log`.

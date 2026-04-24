@@ -67,7 +67,7 @@ return [
 
         'install_errors' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/install-errors.log'),
+            'path' => storage_path('logs/install_errors.log'),
             'level' => env('LOG_LEVEL', 'error'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,

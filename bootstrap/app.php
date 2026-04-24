@@ -22,14 +22,33 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->report(function (\Throwable $exception) {
+        $installerRoutePatterns = ['install', 'install/*'];
+
+        $exceptions->report(function (\Throwable $exception) use ($installerRoutePatterns) {
             if (! app()->bound('request')) {
+                if (! app()->runningInConsole()) {
+                    Log::channel('install_errors')->error('Unhandled exception before request binding', [
+                        'exception' => get_class($exception),
+                        'message' => $exception->getMessage(),
+                        'file' => $exception->getFile(),
+                        'line' => $exception->getLine(),
+                    ]);
+                }
+
                 return;
             }
 
             $request = request();
 
-            if (! $request->is('install') && ! $request->is('install/*')) {
+            $isInstallerRequest = false;
+            foreach ($installerRoutePatterns as $pattern) {
+                if ($request->is($pattern)) {
+                    $isInstallerRequest = true;
+                    break;
+                }
+            }
+
+            if (! $isInstallerRequest) {
                 return;
             }
 
