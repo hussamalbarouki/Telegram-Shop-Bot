@@ -1,0 +1,30 @@
+# DEPLOYMENT_SHARED_HOSTING
+
+## المتطلبات
+- PHP 8.2+
+- امتدادات: pdo_sqlite, sqlite3, mbstring, curl, openssl
+- HTTPS مفعّل
+- وجود ملف `.cpanel.yml` في جذر المشروع (مضاف بالفعل)
+- لا توجد تغييرات غير ملتزم بها في الفرع قبل النشر
+
+## النشر بدون SSH (رفع ZIP يدوي)
+1. جهّز المشروع محليًا مع `vendor/`.
+2. ارفع الملفات كاملة عبر FTP/File Manager.
+3. اجعل `public/index.php` نقطة الدخول (داخل public_html).
+4. تأكد من صلاحيات الكتابة:
+   - `storage/`
+   - `bootstrap/cache/`
+   - `database/`
+   - `public/uploads/`
+5. افتح `/install` وأكمل المعالج.
+
+## النشر عبر cPanel Git Version Control
+1. اربط المستودع داخل cPanel.
+2. تأكد أن `.cpanel.yml` موجود في جذر المشروع.
+3. اضغط Deploy من cPanel.
+4. راقب Log للتأكد أن النسخ تم إلى `public_html`.
+
+## بعد التثبيت
+- ادخل `/admin/login`.
+- اختبر `/health`.
+- اضبط Webhook باستخدام السر.

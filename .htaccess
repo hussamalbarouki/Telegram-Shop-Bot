@@ -1,0 +1,8 @@
+<FilesMatch "^(\.env|composer\.(json|lock)|phpunit\.xml)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(storage|database|vendor)/ - [F,L]
+</IfModule>
