@@ -41,3 +41,7 @@
 - نسخة SQLite: `database/database.sqlite`.
 - الملفات العامة: `public/uploads`.
 - التسليمات الرقمية الحساسة: `storage/app/digital-deliveries`.
+
+## السجلات (Logs)
+- سجل Laravel العام: `storage/logs/laravel.log`.
+- سجل أخطاء التثبيت (`/install`): `storage/logs/install-errors-YYYY-MM-DD.log`.
