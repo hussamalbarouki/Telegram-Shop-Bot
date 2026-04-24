@@ -1,0 +1,9 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/$USER/public_html
+    - /bin/echo "[CPANEL] Starting deployment to ${DEPLOYPATH}"
+    - /bin/mkdir -p ${DEPLOYPATH}
+    - /bin/rsync -a --delete --exclude='.git' --exclude='.github' --exclude='node_modules' --exclude='tests' ./ ${DEPLOYPATH}/
+    - /bin/mkdir -p ${DEPLOYPATH}/storage/app/digital-deliveries ${DEPLOYPATH}/public/uploads ${DEPLOYPATH}/bootstrap/cache
+    - /bin/chmod -R 775 ${DEPLOYPATH}/storage ${DEPLOYPATH}/bootstrap/cache ${DEPLOYPATH}/database ${DEPLOYPATH}/public/uploads || true
+    - /bin/echo "[CPANEL] Deployment completed"
